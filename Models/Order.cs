@@ -8,20 +8,7 @@ namespace Source.Models
     {
         private readonly ISet<OrderItem> _items = new HashSet<OrderItem>();
         public decimal TaxRate { get; } = 0.23M;
-        public decimal TotalPrice
-        {
-            get
-            {
-                var sum = 0M;
-                foreach(var item in Items)
-                {
-                    sum += item.TotalPrice;
-                }
-
-                return (1 + TaxRate) * sum;
-            }
-        }
-        
+        public decimal TotalPrice => (1 + TaxRate) * Items.Sum(x => x.TotalPrice);
         public bool IsPurchased { get; private set; }
         public IEnumerable<OrderItem> Items => _items;
 
@@ -36,15 +23,7 @@ namespace Source.Models
 
         public void RemoveProduct(int productId)
         {
-            OrderItem existingItem = null;
-            foreach(OrderItem item in Items)
-            {
-                if(item.ProductId == productId)
-                {
-                    existingItem = item;
-                    break;
-                }
-            }
+            var existingItem = Items.SingleOrDefault(x => x.ProductId == productId);
             if(existingItem == null)
             {
                 throw new ArgumentNullException(nameof(existingItem),

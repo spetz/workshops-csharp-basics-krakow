@@ -16,15 +16,7 @@ namespace Source.Models
 
         public void AddProduct(Product product, int quantity = 1)
         {
-            CartItem cartItem = null;
-            foreach(var item in _items)
-            {
-                if(item.ProductId == product.Id)
-                {
-                    cartItem = item;
-                    break;
-                }
-            }
+            var cartItem = _items.SingleOrDefault(x => x.ProductId == product.Id);
             if(cartItem == null)
             {
                 _items.Add(new CartItem(product.Id, quantity, product.Price));

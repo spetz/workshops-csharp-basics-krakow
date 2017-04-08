@@ -40,7 +40,7 @@ namespace Source.Persistence
             {
                 return;
             }
-            //TODO: Add validation. 
+            throw new InvalidOperationException("Not connected.");
         }
     }
 }

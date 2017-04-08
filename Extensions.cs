@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Source.Models;
 
 namespace Source
 {
@@ -33,5 +36,8 @@ namespace Source
                 throw new ArgumentException($"{paramName} is less than 0.", paramName);
             }
         }
+
+        public static T GetById<T>(this IEnumerable<T> values, int id) where T : Entity
+            => values.SingleOrDefault(x => x.Id == id);
     }
 }

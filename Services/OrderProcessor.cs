@@ -14,34 +14,21 @@ namespace Source.Services
             _database = database;
         }
 
-        public Result<Order> CompleteOrder(Cart cart)
+        public Order CompleteOrder(Cart cart)
         {
             Console.WriteLine("Processing an order...");
-            User user = null;
-            foreach(var dbUser in _database.Users)
+            var user = _database.Users.GetById(cart.UserId);
+            var orderId = _database.Orders.Any() ? _database.Orders.Max(x => x.Id) + 1 : 1;
+            var order = new Order(orderId);
+            foreach(var item in cart.Items)
             {
-                if(dbUser.Id == cart.UserId)
-                {
-                    user = dbUser;
-                    break;
-                }
-            }
-            int orderId = _database.Orders.Count;
-            Order order = new Order(orderId);
-            foreach(CartItem item in cart.Items)
-            {
-                foreach(var product in _database.Products)
-                {
-                    if(product.Id == item.ProductId)
-                    {
-                        order.AddProduct(product, item.Quantity);
-                    }
-                }
+                var product = _database.Products.Single(x => x.Id == item.ProductId);
+                order.AddProduct(product, item.Quantity);
             }
             user.PurchaseOrder(order);
             _database.SaveChanges();
-            
-            return Result<Order>.Ok(order);
+
+            return order;
         }
     }
 }

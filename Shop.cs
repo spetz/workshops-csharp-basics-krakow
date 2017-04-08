@@ -12,6 +12,7 @@ namespace Source
             IDatabase database = CreateDatabase();
             IShoppingService shoppingService = new ShoppingService(database);
             IOrderProcessor orderProcessor = new OrderProcessor(database);
+            IActionHandler actionHandler = new ActionHandler();
             
             User user = shoppingService.SignIn("user1@email.com", "secret");
             Cart cart = shoppingService.GetCart("user1@email.com");
@@ -21,7 +22,8 @@ namespace Source
             cart.AddProduct(ball);
             cart.AddProduct(shoppingService.GetProduct("Monitor"));
 
-            var completedOrder = orderProcessor.CompleteOrder(cart);
+            var completedOrder = actionHandler
+                .Handle(() => orderProcessor.CompleteOrder(cart));
             var order = completedOrder.Item;
             if(completedOrder.IsValid)
             {

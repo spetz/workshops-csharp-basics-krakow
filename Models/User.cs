@@ -31,7 +31,7 @@ namespace Source.Models
                 return;
             }
 
-            Email = email;
+            Email = email.ToLowerInvariant();
             MarkAsUpdated();
         }
 

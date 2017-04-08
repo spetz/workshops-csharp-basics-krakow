@@ -19,18 +19,15 @@ namespace Source.Services
         public User SignIn(string email, string password)
         {
             Console.WriteLine($"Signing in user '{email}'...");
-            User user = null;
-            foreach(var dbUser in _database.Users)
+            var user = _database.Users
+                .SingleOrDefault(x => x.Email == email.ToLowerInvariant());
+            if(user == null)
             {
-                if(dbUser.Email == email)
-                {
-                    user = dbUser;
-                    break;
-                }
+                throw new ArgumentNullException(nameof(user), "User was not found.");
             }
             if(user.Password != password)
             {
-                //TODO: Add validation. 
+                throw new InvalidOperationException("Invalid password."); 
             }
             _userCarts[user.Email] = new Cart(user);
 
@@ -40,16 +37,7 @@ namespace Source.Services
         public Cart GetCart(string email) => _userCarts[email];
 
         public Product GetProduct(string name)
-        {
-            foreach(var product in _database.Products)
-            {
-                if(product.Name.ToLowerInvariant() == name.ToLowerInvariant())
-                {
-                    return product;
-                }
-            }
-
-            return null;
-        }
+            => _database.Products
+            .SingleOrDefault(x => x.Name.ToLowerInvariant() == name.ToLowerInvariant());
     }
 }
