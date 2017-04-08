@@ -14,7 +14,7 @@ namespace Source.Services
             _database = database;
         }
 
-        public Order CompleteOrder(Cart cart)
+        public Result<Order> CompleteOrder(Cart cart)
         {
             Console.WriteLine("Processing an order...");
             User user = null;
@@ -40,7 +40,8 @@ namespace Source.Services
             }
             user.PurchaseOrder(order);
             _database.SaveChanges();
-            return order;
+            
+            return Result<Order>.Ok(order);
         }
     }
 }

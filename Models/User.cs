@@ -25,10 +25,7 @@ namespace Source.Models
 
         public void SetEmail(string email)
         {
-            if(string.IsNullOrWhiteSpace(email))
-            {
-                //TODO: Add validation. 
-            }
+            email.FailIfEmpty(nameof(email));
             if(Email == email)
             {
                 return;
@@ -40,10 +37,7 @@ namespace Source.Models
 
         public void SetPassword(string password)
         {
-            if(string.IsNullOrWhiteSpace(password))
-            {
-                //TODO: Add validation. 
-            }
+            password.FailIfEmpty(nameof(password));
             if(Password == password)
             {
                 return;
@@ -55,10 +49,7 @@ namespace Source.Models
 
         public void SetAge(int age)
         {
-            if(age < 13)
-            {
-                //TODO: Add validation. 
-            }
+            age.FailIfLessThan(13, nameof(age));
             if(Age == age)
             {
                 return;
@@ -92,11 +83,7 @@ namespace Source.Models
 
         public void IncreaseFunds(decimal funds)
         {
-            if(funds <= 0)
-            {
-                //TODO: Add validation. 
-            }
-
+            funds.FailIfLessThanZero(nameof(funds));
             Funds += funds;
             MarkAsUpdated();
         }
@@ -105,13 +92,14 @@ namespace Source.Models
         {
             if(!IsActive)
             {
-                //TODO: Add validation. 
+                throw new InvalidOperationException("User is not active.");
             }
 
-            decimal orderPrice = order.TotalPrice;
-            if(Funds - orderPrice < 0)
+            var orderPrice = order.TotalPrice;
+            var remainingFunds = Funds - orderPrice;
+            if(remainingFunds < 0)
             {
-                //TODO: Add validation. 
+                throw new InvalidOperationException("You don't have enough money.");
             }
             order.Purchase();
             Funds -= orderPrice;

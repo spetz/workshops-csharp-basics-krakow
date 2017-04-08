@@ -11,12 +11,13 @@ namespace Source.Models
 
         protected Item(int productId, int quantity, decimal unitPrice)
         {
-            //TODO: Add validation.              
+            productId.FailIfLessThanOne(nameof(productId));
+            quantity.FailIfLessThanOne(nameof(quantity));
+            unitPrice.FailIfLessThanZero(nameof(unitPrice));
             ProductId = productId;
             Quantity = quantity;
             UnitPrice = unitPrice;
         }
-
 
         public virtual void IncreaseQuantity()
         {

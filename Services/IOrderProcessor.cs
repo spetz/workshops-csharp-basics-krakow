@@ -4,6 +4,6 @@ namespace Source.Services
 {
     public interface IOrderProcessor
     {
-        Order CompleteOrder(Cart cart);
+        Result<Order> CompleteOrder(Cart cart);
     }
 }

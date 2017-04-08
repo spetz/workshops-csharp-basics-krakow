@@ -22,12 +22,13 @@ namespace Source
             cart.AddProduct(shoppingService.GetProduct("Monitor"));
 
             var completedOrder = orderProcessor.CompleteOrder(cart);
-            if(completedOrder != null)
+            var order = completedOrder.Item;
+            if(completedOrder.IsValid)
             {
-                Console.WriteLine($"Order was completed. You've spent {completedOrder.TotalPrice} PLN.");
+                Console.WriteLine($"Order was completed. You've spent {order.TotalPrice} PLN.");
                 return;
             }
-            Console.WriteLine($"There was an error while completing an order.");;
+            Console.WriteLine(completedOrder.ErrorMessage);
         }
 
         private IDatabase CreateDatabase()

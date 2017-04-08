@@ -10,7 +10,9 @@ namespace Source.Models
 
         public Address(string city, string street, string zipCode)
         {
-            //TODO: Add validation.           
+            city.FailIfEmpty(nameof(city));
+            street.FailIfEmpty(nameof(street));
+            zipCode.FailIfEmpty(nameof(zipCode));            
             City = city;
             Street = street;
             ZipCode = zipCode;

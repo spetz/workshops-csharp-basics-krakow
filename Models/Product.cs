@@ -9,7 +9,8 @@ namespace Source.Models
 
         public Product(int id, string name, decimal price) : base(id)
         {
-            //TODO: Add validation. 
+            name.FailIfEmpty(nameof(name));
+            price.FailIfLessThanZero(nameof(price));
             Name = name;
             Price = price;
         }

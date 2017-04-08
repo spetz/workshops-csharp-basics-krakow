@@ -47,7 +47,8 @@ namespace Source.Models
             }
             if(existingItem == null)
             {
-                //TODO: Add validation.   
+                throw new ArgumentNullException(nameof(existingItem),
+                    $"Product with id {productId} was not found.");   
             }
             _items.Remove(existingItem);
         }
@@ -56,7 +57,7 @@ namespace Source.Models
         {
             if(IsPurchased)
             {
-                //TODO: Add validation. 
+                throw new InvalidOperationException("Order was already purchased."); 
             }
             IsPurchased = true;
         }

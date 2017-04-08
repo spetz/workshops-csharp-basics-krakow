@@ -1,5 +1,3 @@
-using System;
-
 namespace Source.Models
 {
     public abstract class Entity
@@ -8,7 +6,7 @@ namespace Source.Models
 
         protected Entity(int id)
         {
-            //TODO: Add validation.   
+            id.FailIfLessThanOne(nameof(id));  
             Id = id;
         }
     }
